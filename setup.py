@@ -1,17 +1,24 @@
 import re
-from pathlib import Path
+import six
+
+if six.PY2:
+    FileNotFoundError = IOError
+    from io import open
+    from pathlib2 import Path
+else:
+    from pathlib import Path
 
 from setuptools import find_packages, setup
 
 
-def get_version(package: str) -> str:
+def get_version(package):
     version = (Path("src") / package / "__version__.py").read_text()
     match = re.search("__version__ = ['\"]([^'\"]+)['\"]", version)
     assert match is not None
     return match.group(1)
 
 
-def get_long_description() -> str:
+def get_long_description():
     with open("README.md", encoding="utf8") as readme:
         with open("CHANGELOG.md", encoding="utf8") as changelog:
             return readme.read() + "\n\n" + changelog.read()
@@ -34,19 +41,22 @@ setup(
     include_package_data=True,
     zip_safe=False,
     install_requires=[],
-    python_requires=">=3.6",
+    python_requires=">=2.7",
     license="MIT",
     classifiers=[
         "Development Status :: 4 - Beta",
         "Operating System :: OS Independent",
         "Intended Audience :: Developers",
-        "Programming Language :: Python :: 3 :: Only",
+        "Programming Language :: Python :: 2",
+        "Programming Language :: Python :: 2.7",
+        "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "Environment :: Web Environment",
         "Topic :: Software Development :: Libraries :: Python Modules",
         "Framework :: Django",
+        "Framework :: Django :: 1.8",
         "Framework :: Django :: 2.2",
         "Framework :: Django :: 3.0",
     ],

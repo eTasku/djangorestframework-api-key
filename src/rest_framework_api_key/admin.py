@@ -8,7 +8,7 @@ from .models import AbstractAPIKey, APIKey
 
 
 class APIKeyModelAdmin(admin.ModelAdmin):
-    model: typing.Type[AbstractAPIKey]
+    # model: typing.Type[AbstractAPIKey]
 
     list_display = (
         "prefix",
@@ -21,11 +21,9 @@ class APIKeyModelAdmin(admin.ModelAdmin):
     list_filter = ("created",)
     search_fields = ("name", "prefix")
 
-    def get_readonly_fields(
-        self, request: HttpRequest, obj: models.Model = None
-    ) -> typing.Tuple[str, ...]:
+    def get_readonly_fields(self, request, obj=None):
         obj = typing.cast(AbstractAPIKey, obj)
-        fields: typing.Tuple[str, ...]
+        # fields: typing.Tuple[str, ...]
 
         fields = ("prefix",)
         if obj is not None and obj.revoked:
@@ -35,11 +33,11 @@ class APIKeyModelAdmin(admin.ModelAdmin):
 
     def save_model(
         self,
-        request: HttpRequest,
-        obj: AbstractAPIKey,
-        form: typing.Any = None,
-        change: bool = False,
-    ) -> None:
+        request,
+        obj,
+        form=None,
+        change=False,
+    ):
         created = not obj.pk
 
         if created:
